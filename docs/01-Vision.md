@@ -16,12 +16,13 @@ Membangun AI Accountant yang mampu bekerja sebagai akuntan profesional bagi UMKM
 
 # 2. Product Mission
 
-AI Accountant bertujuan untuk:
+1. Mengotomatisasi pembukuan UMKM.
 
-- Membantu UMKM melakukan pembukuan harian secara mudah melalui percakapan.
-- Menghasilkan laporan keuangan yang akurat dan konsisten.
-- Memberikan penjelasan yang mudah dipahami mengenai kondisi keuangan usaha.
-- Menjadi asisten keuangan yang dapat diakses kapan saja melalui WhatsApp.
+2. Menjadi partner akuntansi yang selalu tersedia.
+
+3. Membantu pemilik usaha mengambil keputusan.
+
+4. Menjadi fondasi digitalisasi keuangan UMKM.
 
 ---
 
@@ -57,13 +58,23 @@ Pengguna cukup mengirim pesan seperti:
 
 "Saya membeli bahan baku Rp2.500.000 secara transfer."
 
+AI tidak langsung membuat jurnal.
+
 AI akan:
 
-- memahami transaksi,
-- mengklasifikasikan akun,
-- membuat jurnal,
-- memperbarui laporan keuangan,
-- menjelaskan transaksi kepada pengguna.
+1. Memahami konteks transaksi.
+
+2. Memvalidasi informasi yang tersedia.
+
+3. Mengajukan pertanyaan apabila data belum cukup.
+
+4. Menentukan akun berdasarkan COA.
+
+5. Membuat jurnal.
+
+6. Memperbarui laporan.
+
+7. Menjelaskan hasil kepada pengguna.
 
 ---
 
@@ -99,11 +110,15 @@ Versi pertama belum mencakup:
 
 Versi pertama dianggap berhasil apabila AI mampu:
 
-- Mengklasifikasikan transaksi dengan akurat.
-- Membuat jurnal otomatis.
-- Menjawab pertanyaan keuangan pengguna.
-- Menyusun laporan keuangan sederhana.
-- Membantu minimal 100 UMKM.
+- 100 UMKM aktif.
+
+- Akurasi klasifikasi transaksi ≥95%.
+
+- 90% transaksi dapat diproses tanpa intervensi manusia.
+
+- Laporan keuangan dapat dihasilkan secara otomatis.
+
+- Kepuasan pengguna minimal 4,5/5.
 
 ---
 
@@ -126,7 +141,7 @@ Versi pertama memiliki kemampuan:
 
 Menjadi AI Accountant terpercaya bagi jutaan UMKM Indonesia yang mampu berperan sebagai Bookkeeper, Financial Analyst, Tax Assistant, dan Business Advisor melalui percakapan alami.
 
-# Core Philosophy
+# 11. Core Philosophy
 
 AI Accountant bukan software akuntansi.
 
@@ -137,3 +152,59 @@ Setiap keputusan yang diambil harus mengikuti cara berpikir seorang akuntan prof
 AI harus memahami transaksi terlebih dahulu, kemudian melakukan pencatatan, melakukan validasi, dan terakhir menjelaskan hasilnya kepada pengguna.
 
 Tujuan AI bukan sekadar menghasilkan jurnal, tetapi membantu pemilik usaha memahami kondisi keuangannya.
+Ketika AI tidak yakin, AI harus bertanya.
+
+# 12. Product Scope
+Yang dilakukan AI
+
+✓ Mencatat transaksi
+
+✓ Membuat jurnal
+
+✓ Menyusun laporan
+
+✓ Menjawab pertanyaan keuangan
+
+✓ Memberikan insight sederhana
+
+──────────────
+
+Yang tidak dilakukan AI
+
+✗ Mengambil keputusan bisnis
+
+✗ Menyetujui pembayaran
+
+✗ Menandatangani laporan
+
+✗ Mengubah transaksi tanpa izin
+
+✗ Menghapus histori
+
+# 13. AI Promise
+
+Kami percaya bahwa setiap UMKM berhak memiliki akses kepada akuntan profesional.
+
+AI Accountant hadir bukan untuk menggantikan manusia,
+tetapi untuk membuat layanan akuntansi menjadi lebih mudah,
+lebih cepat,
+lebih terjangkau,
+dan tetap dapat dipercaya.
+
+---
+
+# Decision Log
+
+## D-001
+
+Keputusan:
+AI Accountant berinteraksi melalui WhatsApp sebagai antarmuka utama.
+
+Alasan:
+WhatsApp adalah aplikasi komunikasi yang paling umum digunakan oleh UMKM Indonesia.
+
+Dampak:
+Seluruh desain percakapan dan kemampuan AI harus dioptimalkan untuk komunikasi berbasis chat.
+
+Status:
+Approved
