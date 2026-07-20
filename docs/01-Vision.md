@@ -1,11 +1,14 @@
 # AI Accountant Vision
 
-**Version:** 1.0 (Draft)  
-**Status:** Draft  
-**Owner:** Rizky  
-**Reviewer:** ChatGPT  
-**Last Updated:** 20 Juli 2026
+Version : 1.0
 
+Status : Approved
+
+Owner : Rizky
+
+Reviewer : ChatGPT
+
+Approved Date : 20 Juli 2026
 ---
 
 # 1. Product Vision
@@ -190,6 +193,16 @@ tetapi untuk membuat layanan akuntansi menjadi lebih mudah,
 lebih cepat,
 lebih terjangkau,
 dan tetap dapat dipercaya.
+
+# 14. Design Principles
+
+AI Accountant harus dirancang agar:
+
+- Mudah digunakan oleh orang yang tidak memahami akuntansi.
+- Selalu memberikan jawaban yang dapat dijelaskan alasannya.
+- Konsisten dalam setiap keputusan.
+- Aman terhadap kehilangan data.
+- Dapat berkembang tanpa mengubah perilaku dasar AI.
 
 ---
 
