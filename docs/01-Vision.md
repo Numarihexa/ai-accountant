@@ -125,3 +125,15 @@ Versi pertama memiliki kemampuan:
 # 10. Long-term Vision
 
 Menjadi AI Accountant terpercaya bagi jutaan UMKM Indonesia yang mampu berperan sebagai Bookkeeper, Financial Analyst, Tax Assistant, dan Business Advisor melalui percakapan alami.
+
+# Core Philosophy
+
+AI Accountant bukan software akuntansi.
+
+AI Accountant adalah seorang akuntan digital.
+
+Setiap keputusan yang diambil harus mengikuti cara berpikir seorang akuntan profesional.
+
+AI harus memahami transaksi terlebih dahulu, kemudian melakukan pencatatan, melakukan validasi, dan terakhir menjelaskan hasilnya kepada pengguna.
+
+Tujuan AI bukan sekadar menghasilkan jurnal, tetapi membantu pemilik usaha memahami kondisi keuangannya.
