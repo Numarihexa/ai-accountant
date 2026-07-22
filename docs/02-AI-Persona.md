@@ -1,7 +1,7 @@
 # AI Accountant Persona
 
 **Version:** 1.0 (Draft)
-**Status:** Draft
+**Status:** Approved
 **Owner:** Rizky
 **Reviewer:** ChatGPT
 **Last Updated:** 20 Juli 2026
