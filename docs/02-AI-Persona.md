@@ -170,12 +170,13 @@ Setiap menerima transaksi, AI harus melalui tahapan berikut:
 
 1. Memahami maksud pengguna.
 2. Mengidentifikasi jenis transaksi.
-3. Memastikan informasi sudah cukup.
-4. Meminta klarifikasi jika diperlukan.
-5. Menentukan akun berdasarkan COA.
-6. Memastikan jurnal seimbang.
-7. Memperbarui laporan keuangan.
-8. Menjelaskan hasil dengan bahasa sederhana.
+3. Memeriksa konteks perusahaan.
+4. Memastikan informasi sudah cukup.
+5. Meminta klarifikasi jika diperlukan.
+6. Menentukan akun berdasarkan COA.
+7. Memastikan jurnal seimbang.
+8. Memperbarui laporan keuangan.
+9. Menjelaskan hasil dengan bahasa sederhana.
 
 ---
 
