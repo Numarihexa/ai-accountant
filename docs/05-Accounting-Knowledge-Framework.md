@@ -1,9 +1,9 @@
 # AI Accountant Accounting Knowledge Framework
 
-**Version:** 1.0 (Draft)  
-**Status:** Draft  
-**Owner:** Rizky  
-**Reviewer:** ChatGPT  
+**Version:** 1.0 (Draft)
+**Status:** Draft
+**Owner:** Rizky
+**Reviewer:** ChatGPT
 **Last Updated:** 20 Juli 2026
 
 ---
@@ -46,7 +46,7 @@ AI tidak boleh menggunakan pengetahuan yang belum tervalidasi.
 
 AI Accountant menggunakan tiga lapisan informasi sebelum mengambil keputusan.
 
-```
+```text
 Knowledge
         │
 Memory
@@ -195,7 +195,51 @@ AI harus memiliki pengetahuan minimal mengenai:
 
 ---
 
-# 8. Knowledge Dependencies
+# 8. Knowledge Relationships
+
+Knowledge tidak berdiri sendiri, tetapi saling berhubungan.
+
+Contoh hubungan:
+
+```text
+Customer
+      │
+      ▼
+Invoice
+      │
+      ▼
+Piutang
+      │
+      ▼
+Pembayaran
+      │
+      ▼
+Kas
+```
+
+Reasoning Engine harus memahami hubungan antar knowledge sebelum mengambil keputusan.
+
+---
+
+# 9. Knowledge Retrieval
+
+Sebelum melakukan reasoning, AI harus mengambil knowledge yang relevan.
+
+Urutan pengambilan informasi:
+
+1. Context
+2. Company Memory
+3. Accounting Rules
+4. COA
+5. Business Knowledge
+
+AI tidak perlu mengambil seluruh knowledge apabila tidak relevan dengan transaksi yang sedang diproses.
+
+Tujuan proses ini adalah meningkatkan efisiensi reasoning, mengurangi penggunaan token, dan mempercepat waktu respons.
+
+---
+
+# 10. Knowledge Dependencies
 
 Reasoning Engine bergantung pada:
 
@@ -209,7 +253,7 @@ Apabila salah satu informasi belum tersedia, AI wajib meminta klarifikasi kepada
 
 ---
 
-# 9. Knowledge Validation
+# 11. Knowledge Validation
 
 Sebelum digunakan, knowledge harus memenuhi syarat berikut.
 
@@ -222,7 +266,22 @@ Knowledge yang belum tervalidasi tidak boleh digunakan sebagai dasar pencatatan.
 
 ---
 
-# 10. Knowledge Updates
+# 12. Knowledge Confidence
+
+Setiap knowledge memiliki tingkat kepercayaan.
+
+| Confidence | Status |
+|------------|--------|
+| 95–100% | Sangat Terpercaya |
+| 80–94% | Terpercaya |
+| 60–79% | Perlu Verifikasi |
+| <60% | Tidak Boleh Digunakan |
+
+Reasoning Engine harus mempertimbangkan Knowledge Confidence sebelum mengambil keputusan.
+
+---
+
+# 13. Knowledge Updates
 
 Knowledge dapat diperbarui apabila:
 
@@ -236,7 +295,7 @@ Seluruh perubahan harus memiliki riwayat (versioning).
 
 ---
 
-# 11. Knowledge Governance
+# 14. Knowledge Governance
 
 Seluruh knowledge harus memiliki:
 
@@ -250,7 +309,42 @@ Knowledge yang belum berstatus **Approved** tidak boleh digunakan sebagai dasar 
 
 ---
 
-# 12. Knowledge Boundaries
+# 15. Knowledge Lifecycle
+
+Setiap knowledge memiliki siklus hidup berikut.
+
+```text
+Draft
+   │
+   ▼
+Review
+   │
+   ▼
+Approved
+   │
+   ▼
+Active
+   │
+   ▼
+Deprecated
+   │
+   ▼
+Archived
+```
+
+Hanya knowledge dengan status **Active** yang boleh digunakan oleh Reasoning Engine.
+
+---
+
+# 16. Knowledge Version Compatibility
+
+Reasoning Engine harus memastikan seluruh knowledge yang digunakan berasal dari versi yang kompatibel.
+
+Apabila ditemukan konflik versi, AI harus menggunakan versi yang telah ditetapkan sebagai **Active** oleh sistem.
+
+---
+
+# 17. Knowledge Boundaries
 
 AI tidak boleh:
 
@@ -262,7 +356,7 @@ AI tidak boleh:
 
 ---
 
-# 13. Example
+# 18. Example
 
 ## User
 
@@ -270,13 +364,15 @@ AI tidak boleh:
 
 ↓
 
-Layer Memory diperbarui:
+Layer Memory diperbarui.
 
+```text
 Inventory Policy = FIFO
+```
 
 ↓
 
-Reasoning Engine membaca Memory
+Reasoning Engine membaca Memory.
 
 ↓
 
@@ -284,11 +380,11 @@ Seluruh transaksi persediaan menggunakan metode FIFO.
 
 ↓
 
-Laporan persediaan mengikuti FIFO.
+Laporan persediaan mengikuti metode FIFO.
 
 ---
 
-# 14. Future Knowledge Modules
+# 19. Future Knowledge Modules
 
 Framework ini akan berkembang menjadi beberapa modul khusus.
 
@@ -305,32 +401,42 @@ Framework ini akan berkembang menjadi beberapa modul khusus.
 
 ---
 
-# 15. Relationship With Other Documents
+# 20. Relationship With Other Documents
 
-Accounting Knowledge Framework menjadi penghubung antara seluruh dokumen arsitektur AI.
+Accounting Knowledge Framework menjadi penghubung seluruh arsitektur AI.
 
-```
-Vision
+```text
+User
         │
-Persona
+        ▼
+Conversation
         │
-Conversation Design
+        ▼
+Context
         │
-Accounting Knowledge Framework
+        ▼
+Company Memory
         │
-        ├── Accounting Rules
-        ├── COA Master
-        ├── Company Memory
-        └── Context Management
-                │
-                ▼
-        Reasoning Engine
-                │
-                ▼
-             Journal
-                │
-                ▼
-       Financial Statements
+        ▼
+Accounting Knowledge
+        │
+        ▼
+Accounting Rules
+        │
+        ▼
+COA
+        │
+        ▼
+Reasoning Engine
+        │
+        ▼
+Journal
+        │
+        ▼
+Ledger
+        │
+        ▼
+Financial Statements
 ```
 
 Dokumen ini tidak berisi aturan pencatatan secara rinci, melainkan mendefinisikan sumber pengetahuan yang digunakan oleh Reasoning Engine.
