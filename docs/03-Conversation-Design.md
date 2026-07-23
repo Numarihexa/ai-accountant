@@ -62,6 +62,7 @@ Setiap percakapan dengan pengguna berada pada salah satu state berikut.
 | State | Deskripsi | Aksi AI |
 |--------|-----------|----------|
 | Greeting | Memulai percakapan dengan pengguna. | Menyapa dan memahami kebutuhan pengguna. |
+| Intent Detection | Mengenal Intent. | AI harus mengenali intent terlebih dahulu. |
 | Collecting Information | Informasi transaksi belum lengkap. | Mengajukan pertanyaan yang diperlukan untuk melengkapi data. |
 | Reasoning | Informasi sudah lengkap. | Menganalisis transaksi sesuai prinsip akuntansi. |
 | Confirmation | Akan melakukan perubahan penting pada data. | Meminta persetujuan pengguna sebelum melanjutkan. |
@@ -200,15 +201,6 @@ AI tidak boleh:
 - Mengabaikan informasi yang diberikan pengguna.
 
 ---
-
-| State                    | Deskripsi                 | Aksi AI                                  |
-| ------------------------ | ------------------------- | ---------------------------------------- |
-| `Greeting`               | Awal percakapan           | Menyapa dan mengenali kebutuhan          |
-| `Collecting Information` | Data belum lengkap        | Mengajukan pertanyaan yang relevan       |
-| `Reasoning`              | Data lengkap              | Menganalisis transaksi                   |
-| `Confirmation`           | Sebelum perubahan penting | Meminta persetujuan pengguna             |
-| `Completed`              | Transaksi selesai         | Memberikan ringkasan dan dampak          |
-| `Follow-up`              | Ada pertanyaan lanjutan   | Menjawab atau meminta informasi tambahan |
 
 # Decision Log
 
