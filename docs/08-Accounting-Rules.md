@@ -912,446 +912,642 @@ Sebelum jurnal diposting AI memastikan.
 
 === END OF PART 1C ===
 
-# 16. Rule Execution Framework
+# 16. COA Mapping Rules
 
-Rule Execution Framework mendefinisikan bagaimana Reasoning Engine memilih, mengevaluasi, dan mengeksekusi Accounting Rules.
+Seluruh transaksi harus dipetakan ke akun **Chart of Accounts (COA)** sebelum jurnal dibuat.
 
-Framework ini memastikan setiap transaksi diproses secara konsisten, dapat dijelaskan, serta mengikuti kebijakan perusahaan.
+COA Mapping bertujuan untuk memastikan bahwa setiap transaksi menggunakan akun yang konsisten sesuai kebijakan perusahaan.
 
----
-
-## 16.1 Purpose
-
-Rule Execution Framework bertujuan untuk:
-
-- Menstandarkan proses evaluasi rule.
-- Menghindari eksekusi rule yang tidak relevan.
-- Menjamin urutan eksekusi yang konsisten.
-- Memastikan hanya rule yang valid yang digunakan.
-- Mendukung Explainable AI dan Audit Trail.
+Apabila Company Memory memiliki COA khusus, AI wajib menggunakan COA tersebut dan mengabaikan COA bawaan.
 
 ---
 
-## 16.2 Rule Execution Pipeline
+## 16.1 Objectives
+
+COA Mapping bertujuan untuk:
+
+- Menjamin konsistensi akun.
+- Mengurangi kesalahan klasifikasi.
+- Mendukung Explainable AI.
+- Menjaga kesesuaian dengan Company Policy.
+- Mempermudah audit.
+
+---
+
+## 16.2 Mapping Priority
+
+Urutan prioritas pemetaan akun.
+
+1. User Confirmation
+2. Company COA
+3. Company Accounting Policy
+4. Accounting Rules
+5. Standard COA
+6. Accounting Knowledge Framework
+
+---
+
+## 16.3 Mapping Example
+
+| Transaction | Debit | Credit |
+|-------------|-------|--------|
+| Penjualan Tunai | Kas | Pendapatan |
+| Penjualan Kredit | Piutang | Pendapatan |
+| Pembelian ATK Tunai | Beban ATK | Kas |
+| Pembelian Laptop | Aset Tetap | Kas |
+| Setoran Modal | Kas | Modal |
+| Pembayaran Utang | Utang Dagang | Kas |
+
+---
+
+## 16.4 Validation Checklist
+
+AI wajib memastikan:
+
+- ✓ COA tersedia.
+- ✓ Akun aktif.
+- ✓ Tidak menggunakan akun deprecated.
+- ✓ Sesuai Company Policy.
+- ✓ Sesuai Rule.
+
+---
+
+# 17. Validation Rules
+
+Sebelum jurnal dibuat, seluruh transaksi wajib melalui proses validasi.
+
+---
+
+## 17.1 Validation Pipeline
 
 ```text
-Transaction
-      │
-      ▼
-Intent Detection
-      │
-      ▼
-Entity Extraction
-      │
-      ▼
-Context Validation
-      │
-      ▼
-Company Memory Lookup
-      │
-      ▼
-Rule Selection
-      │
-      ▼
-Rule Evaluation
-      │
-      ▼
-Rule Result
-      │
-      ▼
-COA Mapping
-      │
-      ▼
-Journal Proposal
-      │
-      ▼
-Journal Validation
-      │
-      ▼
-Journal Posting
-```
-
-Setiap tahapan wajib berhasil sebelum melanjutkan ke tahap berikutnya.
-
----
-
-## 16.3 Rule Execution Order
-
-Reasoning Engine harus mengevaluasi rule dengan urutan berikut.
-
-| Sequence | Rule |
-|-----------|------|
-| 1 | Context Validation |
-| 2 | Company Policy |
-| 3 | Company Memory |
-| 4 | Accounting Rules |
-| 5 | COA Mapping |
-| 6 | Journal Validation |
-| 7 | Explainability |
-| 8 | Audit Logging |
-
-Rule tidak boleh dieksekusi di luar urutan tersebut.
-
----
-
-## 16.4 Rule Chaining
-
-Satu transaksi dapat memicu lebih dari satu Accounting Rule.
-
-Contoh:
-
-```text
-Purchase Transaction
-        │
-        ▼
-Expense Rule
-        │
-        ▼
-Capitalization Rule
-        │
-        ▼
-Inventory Rule
-        │
-        ▼
-COA Rule
-        │
-        ▼
-Journal Rule
-```
-
-Output dari suatu rule dapat menjadi input bagi rule berikutnya.
-
----
-
-## 16.5 Rule Input
-
-Setiap Rule menerima input minimal berikut.
-
-- Intent
-- Entity
-- Context
-- Company Memory
-- Accounting Policy
-- COA
-- Accounting Period
-- Currency
-- User Confirmation
-
----
-
-## 16.6 Rule Output
-
-Setiap Rule menghasilkan:
-
-- Decision
-- Recommended COA
-- Proposed Journal
-- Confidence Score
-- Explainability
-- Audit Information
-
----
-
-## 16.7 Rule Result
-
-Rule hanya boleh menghasilkan salah satu status berikut.
-
-| Result | Action |
-|----------|--------|
-| PASS | Lanjut ke Rule berikutnya |
-| WARNING | Lanjut dengan catatan |
-| CLARIFICATION | Meminta informasi tambahan |
-| FAIL | Menghentikan proses |
-
-Reasoning Engine harus mengikuti hasil tersebut.
-
----
-
-## 16.8 Rule Severity
-
-Setiap Rule memiliki tingkat keparahan.
-
-| Severity | Action |
-|-----------|--------|
-| Critical | Stop Process |
-| High | Mandatory Clarification |
-| Medium | Warning |
-| Low | Continue |
-
-Severity digunakan oleh Validation Engine.
-
----
-
-## 16.9 Rule Explainability
-
-Setiap Rule harus mampu menjelaskan:
-
-- Mengapa rule dijalankan.
-- Mengapa rule dipilih.
-- Dasar akuntansi yang digunakan.
-- Dampaknya terhadap jurnal.
-- Dampaknya terhadap laporan keuangan.
-
----
-
-## 16.10 Rule Auditability
-
-Setiap eksekusi Rule menghasilkan Audit Trail.
-
-Minimal mencatat:
-
-- Rule ID
-- Rule Version
-- Timestamp
-- Input
-- Output
-- Confidence
-- User Confirmation
-- Generated Journal
-
-Audit Trail tidak boleh diubah setelah jurnal diposting.
-
----
-
-# 17. Rule Validation Framework
-
-Rule Validation Framework memastikan seluruh hasil Reasoning memenuhi standar akuntansi sebelum diposting.
-
----
-
-## 17.1 Validation Objectives
-
-Validation dilakukan untuk memastikan:
-
-- Rule valid.
-- Company Policy sesuai.
-- Journal seimbang.
-- COA tersedia.
-- Tidak ada transaksi duplikat.
-- Accounting Period terbuka.
-
----
-
-## 17.2 Validation Pipeline
-
-```text
-Rule Output
-      │
-      ▼
+Intent
+     │
+     ▼
 Entity Validation
-      │
-      ▼
-Company Policy
-      │
-      ▼
+     │
+     ▼
+Context Validation
+     │
+     ▼
+Company Memory
+     │
+     ▼
 Accounting Rule
-      │
-      ▼
+     │
+     ▼
 COA Validation
-      │
-      ▼
+     │
+     ▼
 Journal Validation
-      │
-      ▼
-Confidence Validation
-      │
-      ▼
+     │
+     ▼
 Approved
 ```
 
 ---
 
-## 17.3 Validation Checklist
+## 17.2 Validation Checklist
 
-AI wajib memeriksa:
+AI harus memastikan:
 
-- Intent
-- Entity
-- Company Memory
-- Accounting Policy
-- COA
-- Debit = Kredit
-- Currency
-- Accounting Period
+- ✓ Intent valid
+- ✓ Entity lengkap
+- ✓ Company Memory tersedia
+- ✓ Company Policy tersedia
+- ✓ Rule Active
+- ✓ COA valid
+- ✓ Accounting Period terbuka
+- ✓ Debit = Kredit
+- ✓ Tidak duplikat
+- ✓ Confidence memenuhi batas minimum
+
+---
+
+# 18. Clarification Rules
+
+AI wajib meminta klarifikasi apabila informasi yang tersedia belum cukup untuk menghasilkan jurnal yang dapat dipertanggungjawabkan.
+
+AI tidak boleh membuat asumsi.
+
+---
+
+## 18.1 Clarification Trigger
+
+Contoh kondisi.
+
+- Metode pembayaran tidak diketahui.
+- Customer belum diketahui.
+- Supplier belum diketahui.
+- Tujuan transaksi belum jelas.
+- Nilai transaksi belum lengkap.
+- Tanggal transaksi belum diketahui.
+- Dua akun memiliki probabilitas yang sama.
+- Company Policy belum tersedia.
+
+---
+
+## 18.2 Clarification Outcome
+
+Setiap klarifikasi menghasilkan salah satu status berikut.
+
+- NEED_CONFIRMATION
+- NEED_INFORMATION
+- MANUAL_REVIEW
+
+---
+
+# 19. Exception Handling
+
+Apabila transaksi tidak dapat diproses menggunakan Rule yang tersedia, AI harus menjalankan mekanisme Exception Handling.
+
+---
+
+## 19.1 Exception Categories
+
+- Missing Entity
+- Invalid Policy
+- Unknown Transaction
+- Rule Conflict
+- Invalid COA
+- Closed Accounting Period
 - Duplicate Transaction
-- Confidence Threshold
 
 ---
 
-# 18. Rule Audit Framework
+## 19.2 Exception Decision Tree
 
-Framework ini menjamin seluruh keputusan AI dapat ditelusuri.
+```text
+Exception
+
+      │
+      ▼
+
+Rule Exists?
+
+      │
+ ┌────┴────┐
+ │         │
+Yes       No
+ │         │
+ ▼         ▼
+
+Execute   Manual Review
+
+```
 
 ---
 
-## 18.1 Audit Information
+## 19.3 Exception Outcome
 
-Setiap Rule harus menyimpan:
+- PASS
+- WARNING
+- NEED_CONFIRMATION
+- MANUAL_REVIEW
+- FAIL
 
+---
+
+# 20. Explainability Rules
+
+Seluruh keputusan AI harus dapat dijelaskan kepada pengguna.
+
+Explainability merupakan bagian wajib dari setiap Rule.
+
+---
+
+## 20.1 Explainability Output
+
+AI minimal mampu menjelaskan.
+
+- Rule yang digunakan.
+- Mengapa rule dipilih.
+- Mengapa akun dipilih.
+- Mengapa jurnal dibuat.
+- Dampak jurnal terhadap laporan keuangan.
+
+---
+
+## 20.2 Decision Reason
+
+Setiap keputusan harus memiliki alasan.
+
+Contoh.
+
+```
+Decision
+
+Expense
+
+Reason
+
+ATK digunakan untuk operasional.
+
+Tidak memenuhi syarat kapitalisasi.
+
+Manfaat kurang dari satu periode.
+```
+
+---
+
+# 21. Rule Confidence
+
+Setiap Rule menghasilkan nilai confidence.
+
+Confidence digunakan untuk menentukan apakah jurnal dapat diposting atau harus diklarifikasi.
+
+---
+
+| Confidence | Action |
+|------------|--------|
+|95–100%|Proceed|
+|80–94%|Proceed with Explanation|
+|60–79%|Need Confirmation|
+|<60%|Stop Processing|
+
+---
+
+## 21.1 Confidence Source
+
+Confidence dihitung dari beberapa sumber.
+
+- Intent Detection
+- Entity Extraction
+- Company Memory
+- Accounting Rule
+- Conversation Context
+
+AI wajib mampu menjelaskan sumber confidence tersebut.
+
+---
+
+# 22. Rule Logging
+
+Seluruh proses evaluasi Rule wajib dicatat.
+
+---
+
+## 22.1 Minimum Log
+
+- Timestamp
 - Rule ID
 - Rule Version
-- COA Version
-- Company Policy Version
-- Journal ID
-- Timestamp
+- Transaction ID
+- Input
+- Output
+- Journal
 - Confidence
 - User Confirmation
 
 ---
 
-## 18.2 Traceability
+## 22.2 Audit Log
+
+Audit Log bersifat immutable.
+
+Tidak boleh diubah setelah jurnal diposting.
+
+---
+
+# 23. Rule Versioning
+
+Setiap Rule memiliki identitas yang unik.
+
+---
+
+## Rule Metadata
+
+| Field | Description |
+|--------|-------------|
+| Rule ID | Unique Identifier |
+| Rule Name | Rule Name |
+| Version | Rule Version |
+| Status | Draft / Review / Active |
+| Effective Date | Effective Date |
+| Owner | Rule Owner |
+| Reviewer | Reviewer |
+| Change History | Revision History |
+
+Reasoning Engine hanya boleh menggunakan Rule berstatus **Active**.
+
+---
+
+# 24. Rule Lifecycle
 
 ```text
-User Message
+Draft
+      │
+      ▼
+Review
+      │
+      ▼
+Approved
+      │
+      ▼
+Active
+      │
+      ▼
+Deprecated
+      │
+      ▼
+Archived
+```
+
+---
+
+## 24.1 Rule Governance
+
+Perubahan Rule harus melalui proses.
+
+Draft
+
+↓
+
+Review
+
+↓
+
+Approval
+
+↓
+
+Deployment
+
+↓
+
+Monitoring
+
+↓
+
+Version Update
+
+---
+
+# 25. Rule Dependency
+
+Accounting Rules memiliki dependency terhadap beberapa modul.
+
+```text
+Intent Catalog
+        │
+        ▼
+Entity Extraction
+        │
+        ▼
+Company Memory
+        │
+        ▼
+Accounting Knowledge
+        │
+        ▼
+Accounting Rules
+        │
+        ▼
+COA
+        │
+        ▼
+Reasoning Engine
+        │
+        ▼
+Journal Engine
+```
+
+---
+
+## 25.1 Dependency Validation
+
+Sebelum Rule dijalankan.
+
+- ✓ Dependency tersedia.
+- ✓ Dependency compatible.
+- ✓ Version compatible.
+
+---
+
+# 26. Rule Boundaries
+
+AI tidak boleh:
+
+- Mengarang Rule.
+- Menggunakan Rule Deprecated.
+- Mengubah Company Policy.
+- Mengubah Company Memory tanpa izin.
+- Menggunakan COA yang tidak aktif.
+- Membuat jurnal ketika Rule gagal divalidasi.
+
+---
+
+## 26.1 Rule Scope
+
+Versi pertama mendukung.
+
+- UMKM Dagang
+- UMKM Jasa
+- UMKM Retail
+
+Versi berikutnya.
+
+- Manufaktur
+- Konstruksi
+- Hospitality
+- Healthcare
+
+---
+
+## 26.2 Rule Constraints
+
+Rule pada versi ini tidak digunakan untuk.
+
+- Payroll
+- Leasing
+- Konsolidasi
+- Foreign Currency
+- Derivatif
+- Financial Instrument
+
+---
+
+# 27. Example Rule
+
+## Rule ID
+
+AR-REV-001
+
+---
+
+### Rule Name
+
+Revenue Recognition
+
+---
+
+### Trigger
+
+Penjualan Barang
+
+---
+
+### Preconditions
+
+- Barang telah diserahkan.
+- Customer diketahui.
+- Nilai diketahui.
+
+---
+
+### Output
+
+Journal Recommendation
+
+---
+
+### Journal
+
+Debit Kas / Piutang
+
+Kredit Pendapatan
+
+---
+
+### Explainability
+
+Pendapatan diakui karena hak perusahaan atas pendapatan telah timbul setelah barang diserahkan.
+
+---
+
+### Auditability
+
+Rule Version
+
+COA Version
+
+Timestamp
+
+Confidence
+
+User Confirmation
+
+---
+
+# 28. Rule Relationship
+
+```text
+Conversation
       │
       ▼
 Intent
       │
       ▼
-Rule
+Entity
       │
       ▼
-Journal
-      │
-      ▼
-Ledger
-      │
-      ▼
-Financial Statement
-```
-
-Seluruh keputusan harus dapat ditelusuri hingga pesan pengguna.
-
----
-
-# 19. Rule Testing Framework
-
-Setiap Rule wajib memiliki Test Case.
-
----
-
-## 19.1 Test Case Structure
-
-| Field | Description |
-|---------|------------|
-| Rule ID | Rule yang diuji |
-| Input | Data transaksi |
-| Expected Output | Hasil yang diharapkan |
-| Generated Journal | Jurnal AI |
-| Validation Result | PASS / FAIL |
-
----
-
-## 19.2 Example
-
-Input
-
-> Membeli Laptop Rp15.000.000 melalui transfer.
-
-Expected
-
-Debit Aset Tetap
-
-Kredit Bank
-
-Result
-
-PASS
-
----
-
-# 20. Rule Performance Framework
-
-Framework ini mendukung skalabilitas AI Accountant.
-
----
-
-## 20.1 Performance Objectives
-
-Reasoning Engine harus:
-
-- Mengurangi penggunaan token.
-- Mempercepat Rule Retrieval.
-- Menghindari evaluasi Rule yang tidak relevan.
-- Mendukung banyak perusahaan secara bersamaan.
-
----
-
-## 20.2 Optimization Strategy
-
-- Rule Cache
-- Company Memory Cache
-- COA Cache
-- Lazy Rule Loading
-- Context Filtering
-
----
-
-## 20.3 Scalability Principles
-
-Rule Engine harus mampu menangani:
-
-- Multi User
-- Multi Company
-- Multi Session
-- Multi Accounting Period
-
-Tanpa memengaruhi konsistensi Rule.
-
----
-
-## 20.4 Relationship With Other Documents
-
-```text
-Accounting Knowledge Framework
-            │
-            ▼
 Company Memory
-            │
-            ▼
-Intent Catalog
-            │
-            ▼
+      │
+      ▼
 Accounting Rules
-            │
-            ▼
-Rule Execution Framework
-            │
-            ▼
-Validation Framework
-            │
-            ▼
-Audit Framework
-            │
-            ▼
+      │
+      ▼
+COA Mapping
+      │
+      ▼
 Journal Engine
-            │
-            ▼
+      │
+      ▼
 Ledger
-            │
-            ▼
+      │
+      ▼
 Financial Statements
 ```
 
-Part ini melengkapi spesifikasi Accounting Rules dengan mendefinisikan mekanisme eksekusi, validasi, audit, pengujian, dan performa Rule Engine.
+---
+
+# 29. Future Rule Modules
+
+Framework akan dikembangkan menjadi modul.
+
+- Revenue Recognition
+- Expense Recognition
+- Inventory
+- Fixed Asset
+- Depreciation
+- Tax
+- Payroll
+- Leasing
+- Manufacturing
+- Construction
+- Budgeting
+- Forecasting
+- KPI Monitoring
+- Fraud Detection
+- Audit Assistance
+
+---
+
+# 30. Relationship With Other Documents
+
+```text
+Vision
+      │
+      ▼
+Persona
+      │
+      ▼
+Conversation Design
+      │
+      ▼
+Intent Catalog
+      │
+      ▼
+Entity Catalog
+      │
+      ▼
+Company Memory
+      │
+      ▼
+Accounting Knowledge Framework
+      │
+      ▼
+Accounting Rules
+      │
+      ▼
+COA Master
+      │
+      ▼
+Reasoning Engine
+      │
+      ▼
+Journal Engine
+      │
+      ▼
+Ledger
+      │
+      ▼
+Financial Statements
+```
+
+Accounting Rules merupakan pusat logika akuntansi yang digunakan oleh seluruh komponen AI Accountant.
 
 ---
 
 # Decision Log
 
-## D-009
+## D-008
 
-### Keputusan
+### Decision
 
-Reasoning Engine wajib menjalankan seluruh Accounting Rules melalui Rule Execution Framework sebelum menghasilkan jurnal.
+Seluruh jurnal AI Accountant harus dihasilkan berdasarkan Accounting Rules yang telah tervalidasi.
 
-### Alasan
+### Rationale
 
-Pemisahan antara logika akuntansi, mekanisme eksekusi, validasi, dan audit meningkatkan konsistensi, transparansi, skalabilitas, serta kemudahan pengembangan AI Accountant.
+Pemisahan antara Reasoning Engine dan Accounting Rules memastikan logika bisnis dapat diaudit, diperbarui, dan dijelaskan tanpa mengubah arsitektur inti AI.
 
-### Dampak
+### Impact
 
-AI Accountant memiliki Rule Engine yang modular, dapat diuji, dapat diaudit, dan siap diimplementasikan untuk melayani banyak perusahaan dengan standar akuntansi yang konsisten.
+- Explainable AI
+- Deterministic Rule Engine
+- Modular Architecture
+- Audit Ready
+- Enterprise Ready
 
 ### Status
 
