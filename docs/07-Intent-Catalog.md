@@ -1,6 +1,6 @@
 # AI Accountant Intent Catalog
 
-**Version:** 1.0 (Draft)
+**Version:** 1.1 (Draft)
 **Status:** Draft
 **Owner:** Rizky
 **Reviewer:** ChatGPT
@@ -69,15 +69,7 @@ Intent selalu dikenali sebelum proses reasoning dimulai.
 
 # 5. Intent Categories
 
-AI Accountant versi pertama mendukung intent berikut.
-
----
-
 ## A. Transaction Recording
-
-Digunakan ketika pengguna ingin mencatat transaksi.
-
-Intent:
 
 - Record Income
 - Record Expense
@@ -92,23 +84,9 @@ Intent:
 - Record Depreciation
 - Record Adjustment
 
-Contoh:
-
-> Hari ini saya membeli ATK Rp500.000 tunai.
-
-↓
-
-Intent:
-
-Record Expense
-
 ---
 
 ## B. Financial Inquiry
-
-Pengguna ingin mengetahui kondisi keuangan.
-
-Intent:
 
 - Check Cash Balance
 - Check Bank Balance
@@ -121,23 +99,9 @@ Intent:
 - Check Asset Value
 - Check Financial Position
 
-Contoh:
-
-> Berapa laba bulan ini?
-
-↓
-
-Intent
-
-Check Profit
-
 ---
 
 ## C. Financial Reports
-
-Pengguna meminta laporan.
-
-Intent:
 
 - Generate Income Statement
 - Generate Balance Sheet
@@ -151,10 +115,6 @@ Intent:
 
 ## D. Analysis
 
-Pengguna meminta analisis.
-
-Intent:
-
 - Analyze Profit
 - Analyze Expenses
 - Analyze Cash Flow
@@ -165,10 +125,6 @@ Intent:
 ---
 
 ## E. Master Data Management
-
-Pengguna mengubah Company Memory.
-
-Intent:
 
 - Add Customer
 - Update Customer
@@ -184,8 +140,6 @@ Intent:
 
 ## F. Company Settings
 
-Intent:
-
 - Update Company Profile
 - Update Accounting Policy
 - Update Fiscal Year
@@ -195,10 +149,6 @@ Intent:
 ---
 
 ## G. Knowledge Request
-
-Pengguna bertanya mengenai akuntansi.
-
-Intent:
 
 - Explain Accounting
 - Explain Journal
@@ -210,8 +160,6 @@ Intent:
 
 ## H. Conversation Control
 
-Intent:
-
 - Greeting
 - Help
 - Cancel
@@ -221,9 +169,59 @@ Intent:
 
 ---
 
-# 6. Intent Priority
+# 6. Intent Registry
 
-Apabila terdapat lebih dari satu intent, AI menggunakan prioritas berikut.
+Setiap intent memiliki metadata yang menjadi acuan seluruh sistem.
+
+| Field | Deskripsi |
+|---------|----------|
+| Intent ID | Identitas unik intent |
+| Intent Name | Nama intent |
+| Category | Kelompok intent |
+| Description | Penjelasan intent |
+| Required Entity | Entity minimal |
+| Optional Entity | Entity tambahan |
+| Need Confirmation | Ya/Tidak |
+| Need Reasoning | Ya/Tidak |
+| Update Company Memory | Ya/Tidak |
+| Output Module | Modul tujuan |
+
+Contoh:
+
+| Field | Value |
+|--------|------|
+| Intent ID | INT-TRX-001 |
+| Intent Name | Record Expense |
+| Category | Transaction Recording |
+| Required Entity | Nominal, Expense Type, Payment Method |
+| Optional Entity | Supplier |
+| Need Confirmation | No |
+| Need Reasoning | Yes |
+| Update Company Memory | No |
+| Output | Journal Engine |
+
+---
+
+# 7. Required Entity Matrix
+
+Setiap intent memiliki entity minimum yang berbeda.
+
+| Intent | Required Entity |
+|---------|----------------|
+| Record Expense | Nominal, Expense Type, Payment Method |
+| Record Sales | Customer, Nominal, Payment Method |
+| Record Asset Purchase | Asset, Nominal, Payment Method |
+| Record Loan | Lender, Nominal |
+| Generate Profit | Accounting Period |
+| Generate Cash Flow | Accounting Period |
+| Check Cash Balance | Tidak ada |
+| Analyze Profit | Accounting Period |
+
+AI wajib meminta klarifikasi apabila Required Entity belum lengkap.
+
+---
+
+# 8. Intent Priority
 
 1. Confirmation
 2. Transaction Recording
@@ -236,69 +234,94 @@ Apabila terdapat lebih dari satu intent, AI menggunakan prioritas berikut.
 
 ---
 
-# 7. Intent Confidence
+# 9. Intent Confidence
 
 | Confidence | Action |
 |------------|--------|
-| 95–100% | Langsung diproses |
-| 80–94% | Diproses dengan penjelasan bila perlu |
-| 60–79% | Meminta klarifikasi |
-| <60% | Tidak boleh diproses |
+|95–100%|Langsung diproses|
+|80–94%|Diproses dengan penjelasan|
+|60–79%|Meminta klarifikasi|
+|<60%|Tidak boleh diproses|
 
 ---
 
-# 8. Multi Intent Handling
+# 10. Multi Intent Handling
 
 Satu pesan dapat memiliki lebih dari satu intent.
 
-Contoh:
-
-> Hari ini saya membeli ATK Rp500.000 dan berapa saldo kas saya sekarang?
-
-Intent:
-
-1. Record Expense
-2. Check Cash Balance
-
 AI harus:
 
-1. Menyelesaikan pencatatan transaksi.
-2. Memperbarui laporan.
-3. Menjawab pertanyaan saldo kas.
+1. Mengurutkan intent berdasarkan prioritas.
+2. Menjalankan intent satu per satu.
+3. Memastikan hasil intent sebelumnya telah selesai sebelum menjalankan intent berikutnya.
 
 ---
 
-# 9. Intent State Transition
+# 11. Intent Conflict Resolution
+
+Apabila dua intent saling bertentangan, AI harus menggunakan aturan berikut.
+
+Prioritas:
+
+1. Confirmation
+2. Cancel Transaction
+3. Update Transaction
+4. Record Transaction
+5. Reporting
+
+Contoh:
+
+```
+Batalkan transaksi kemarin,
+lalu catat ulang.
+```
+
+↓
+
+Confirmation
+
+↓
+
+Cancel Transaction
+
+↓
+
+Record Transaction
+
+AI tidak boleh menjalankan dua intent yang saling bertentangan secara bersamaan.
+
+---
+
+# 12. Intent Lifecycle
+
+Setiap intent memiliki siklus hidup berikut.
 
 ```text
-Greeting
+Detected
       │
       ▼
-Intent Detection
+Validated
       │
       ▼
-Clarification
+Queued
       │
       ▼
-Reasoning
-      │
-      ▼
-Recording
-      │
-      ▼
-Reporting
+Executed
       │
       ▼
 Completed
+      │
+      ▼
+Logged
 ```
+
+Lifecycle ini memastikan seluruh aktivitas AI dapat diaudit.
 
 ---
 
-# 10. Entity Extraction
+# 13. Entity Extraction
 
-Setelah intent dikenali, AI harus mengekstrak entity yang relevan.
-
-Contoh entity:
+Entity yang dapat diekstrak antara lain:
 
 - Tanggal
 - Nominal
@@ -306,22 +329,20 @@ Contoh entity:
 - Supplier
 - Produk
 - Bank
-- Akun
-- Metode Pembayaran
-- Pajak
-- Lokasi
-- Mata Uang
+- COA
+- Payment Method
+- Tax
+- Currency
+- Location
 
-Entity menjadi input bagi Reasoning Engine.
+Entity menjadi input utama bagi Reasoning Engine.
 
 ---
 
-# 11. Intent Routing
-
-Setiap intent diarahkan ke modul yang sesuai.
+# 14. Intent Routing
 
 ```text
-Transaction Intent
+Transaction
         │
         ▼
 Reasoning Engine
@@ -331,12 +352,12 @@ Financial Inquiry
         ▼
 Financial Query Engine
 
-Report Request
+Reporting
         │
         ▼
 Reporting Engine
 
-Knowledge Question
+Knowledge
         │
         ▼
 Knowledge Engine
@@ -347,61 +368,82 @@ Master Data
 Company Memory
 ```
 
-Dengan mekanisme ini, setiap modul hanya menangani tugas sesuai tanggung jawabnya.
+---
+
+# 15. Intent Ownership
+
+Setiap intent memiliki modul utama yang bertanggung jawab.
+
+| Intent | Owner Module |
+|---------|-------------|
+| Transaction Recording | Reasoning Engine |
+| Financial Inquiry | Financial Query Engine |
+| Reporting | Reporting Engine |
+| Knowledge | Knowledge Engine |
+| Company Settings | Company Memory |
+| Master Data | Company Memory |
 
 ---
 
-# 12. Intent Boundaries
+# 16. Intent Logging
+
+Setiap intent yang diproses harus menghasilkan log.
+
+Informasi minimal:
+
+- Timestamp
+- User ID
+- Company ID
+- Intent
+- Confidence
+- Entity
+- Reasoning Result
+- Output
+- Execution Time
+- Status
+
+Log digunakan untuk audit dan debugging.
+
+---
+
+# 17. Intent Metrics
+
+Kualitas Intent Engine diukur menggunakan:
+
+- Intent Detection Accuracy
+- Intent Success Rate
+- Clarification Rate
+- Average Response Time
+- Misclassification Rate
+- Fallback Rate
+
+Metrics digunakan untuk mengevaluasi performa AI.
+
+---
+
+# 18. Intent Boundary Matrix
+
+| Intent | Update Memory | Journal | Report | Confirmation |
+|---------|---------------|---------|--------|--------------|
+| Record Expense | No | Yes | Yes | No |
+| Update COA | Yes | No | No | Yes |
+| Delete Customer | Yes | No | No | Yes |
+| Generate Profit | No | No | Yes | No |
+
+---
+
+# 19. Intent Boundaries
 
 AI tidak boleh:
 
 - Menebak intent apabila confidence rendah.
-- Menjalankan dua intent yang saling bertentangan.
+- Membuat jurnal sebelum intent dikenali.
 - Mengubah Company Memory tanpa intent yang valid.
-- Membuat jurnal apabila intent belum teridentifikasi.
+- Menjalankan intent yang saling bertentangan.
 
 ---
 
-# 13. Example
-
-## User
-
-> Saya menerima pembayaran dari PT Maju Bersama sebesar Rp8.500.000 melalui transfer.
-
-↓
-
-Intent Detection
-
-Record Income
-
-↓
-
-Entity Extraction
-
-- Customer
-- PT Maju Bersama
-
-- Nominal
-- Rp8.500.000
-
-- Payment Method
-- Transfer
-
-↓
-
-Reasoning Engine
-
-↓
-
-Journal
-
-↓
-
-Financial Statements
-
----
-
-# 14. Future Intent Modules
+# 20. Future Intent Modules
 
 Versi berikutnya akan mendukung:
 
@@ -418,7 +460,7 @@ Versi berikutnya akan mendukung:
 
 ---
 
-# 15. Relationship With Other Documents
+# 21. Relationship With Other Documents
 
 ```text
 Vision
@@ -454,7 +496,7 @@ Journal Engine
 Financial Statements
 ```
 
-Intent Catalog menjadi pintu masuk seluruh proses pengambilan keputusan AI Accountant.
+Intent Catalog merupakan gerbang utama seluruh proses AI Accountant.
 
 ---
 
@@ -468,12 +510,8 @@ Seluruh pesan pengguna harus melalui proses Intent Detection sebelum memasuki Re
 
 **Alasan**
 
-Pemisahan proses pemahaman bahasa, identifikasi intent, dan reasoning akan meningkatkan akurasi, mengurangi kesalahan interpretasi, serta mempermudah pengembangan AI Accountant di masa depan.
+Pemisahan proses pemahaman bahasa, identifikasi intent, dan reasoning meningkatkan akurasi, mengurangi kesalahan interpretasi, serta mempermudah pengembangan AI Accountant di masa depan.
 
 **Dampak**
 
-AI Accountant memiliki arsitektur yang modular, scalable, dan mampu menangani berbagai jenis permintaan pengguna melalui satu antarmuka WhatsApp tanpa mencampurkan logika percakapan dengan logika akuntansi.
-
-**Status**
-
-Draft
+AI Accountant memiliki arsitektur yang modular, scalable, dapat diaudit, dan mampu menangani berbagai jenis permintaan pengguna melalui satu antarmuka WhatsApp tanpa mencampurkan logika percakapan dengan logika akuntansi.
