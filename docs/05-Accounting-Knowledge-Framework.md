@@ -195,6 +195,62 @@ AI harus memiliki pengetahuan minimal mengenai:
 
 ---
 
+# 7.1 Industry Knowledge
+
+AI Accountant harus memahami karakteristik akuntansi pada berbagai jenis usaha.
+
+Pengetahuan ini digunakan untuk membantu Reasoning Engine menentukan perlakuan akuntansi yang sesuai dengan konteks bisnis pengguna.
+
+### UMKM Perdagangan
+
+AI harus memahami:
+
+- Persediaan
+- Harga Pokok Penjualan (HPP)
+- Supplier
+- Customer
+- Retur Penjualan
+- Retur Pembelian
+
+---
+
+### UMKM Jasa
+
+AI harus memahami:
+
+- Pendapatan Jasa
+- Work in Progress (WIP)
+- Piutang Jasa
+- Pendapatan Diterima di Muka
+
+---
+
+### UMKM Kuliner
+
+AI harus memahami:
+
+- Persediaan Bahan Baku
+- Produksi Harian
+- Waste / Penyusutan Bahan
+- Food Cost
+- Penjualan Tunai dan Non Tunai
+
+---
+
+### UMKM Kontraktor
+
+AI harus memahami:
+
+- Progress Proyek
+- Termin Pembayaran
+- Retensi
+- Uang Muka Proyek
+- Biaya Proyek
+
+Jenis usaha menjadi salah satu konteks utama dalam proses reasoning karena transaksi yang sama dapat memiliki perlakuan akuntansi yang berbeda pada industri yang berbeda.
+
+---
+
 # 8. Knowledge Relationships
 
 Knowledge tidak berdiri sendiri, tetapi saling berhubungan.
@@ -253,6 +309,28 @@ Apabila salah satu informasi belum tersedia, AI wajib meminta klarifikasi kepada
 
 ---
 
+# 10.1 External Knowledge
+
+Pada kondisi tertentu, AI Accountant dapat menggunakan sumber pengetahuan eksternal yang telah tervalidasi.
+
+Contoh:
+
+- PSAK terbaru
+- Peraturan perpajakan
+- Standar pelaporan keuangan
+- Kebijakan regulator
+- Pedoman resmi pemerintah
+
+External Knowledge hanya digunakan sebagai referensi apabila:
+
+- relevan dengan transaksi,
+- telah diverifikasi,
+- tidak bertentangan dengan kebijakan perusahaan.
+
+AI tidak boleh menggunakan sumber eksternal yang belum tervalidasi sebagai dasar pengambilan keputusan.
+
+---
+
 # 11. Knowledge Validation
 
 Sebelum digunakan, knowledge harus memenuhi syarat berikut.
@@ -263,6 +341,21 @@ Sebelum digunakan, knowledge harus memenuhi syarat berikut.
 - Tidak bertentangan dengan kebijakan perusahaan.
 
 Knowledge yang belum tervalidasi tidak boleh digunakan sebagai dasar pencatatan.
+
+---
+
+# 11.1 Conflict Resolution
+
+Apabila ditemukan konflik antar sumber knowledge, AI harus menggunakan urutan prioritas berikut.
+
+1. Informasi yang telah dikonfirmasi pengguna.
+2. Kebijakan perusahaan.
+3. Company Memory.
+4. Accounting Rules.
+5. PSAK atau regulasi yang berlaku.
+6. General Knowledge AI.
+
+Apabila konflik belum dapat diselesaikan, AI wajib meminta klarifikasi kepada pengguna sebelum melanjutkan proses reasoning.
 
 ---
 
@@ -336,6 +429,47 @@ Hanya knowledge dengan status **Active** yang boleh digunakan oleh Reasoning Eng
 
 ---
 
+# 15.1 Memory Evolution
+
+Company Memory berkembang secara bertahap seiring penggunaan AI.
+
+Contoh:
+
+Hari pertama:
+
+```text
+Supplier = Belum Ada
+```
+
+↓
+
+Pengguna:
+
+> Saya membeli barang dari PT Maju Jaya.
+
+↓
+
+Company Memory diperbarui:
+
+```text
+Supplier
+- PT Maju Jaya
+```
+
+↓
+
+Beberapa hari kemudian:
+
+> Saya membeli lagi dari PT Maju Jaya.
+
+↓
+
+AI mengenali supplier tersebut tanpa perlu meminta informasi yang sama.
+
+Dengan mekanisme ini, AI Accountant mampu belajar dari histori perusahaan tanpa mengubah prinsip akuntansi yang digunakan.
+
+---
+
 # 16. Knowledge Version Compatibility
 
 Reasoning Engine harus memastikan seluruh knowledge yang digunakan berasal dari versi yang kompatibel.
@@ -401,6 +535,45 @@ Framework ini akan berkembang menjadi beberapa modul khusus.
 
 ---
 
+# 19.1 Knowledge Flow
+
+Berikut merupakan alur penggunaan knowledge pada setiap transaksi.
+
+```text
+User
+   │
+   ▼
+Conversation
+   │
+   ▼
+Intent Detection
+   │
+   ▼
+Conversation Context
+   │
+   ▼
+Company Memory
+   │
+   ▼
+Knowledge Retrieval
+   │
+   ▼
+Accounting Rules
+   │
+   ▼
+Reasoning Engine
+   │
+   ▼
+Journal
+   │
+   ▼
+Financial Statements
+```
+
+Flow ini memastikan bahwa setiap keputusan akuntansi selalu didasarkan pada informasi yang relevan, tervalidasi, dan sesuai konteks perusahaan.
+
+---
+
 # 20. Relationship With Other Documents
 
 Accounting Knowledge Framework menjadi penghubung seluruh arsitektur AI.
@@ -440,6 +613,32 @@ Financial Statements
 ```
 
 Dokumen ini tidak berisi aturan pencatatan secara rinci, melainkan mendefinisikan sumber pengetahuan yang digunakan oleh Reasoning Engine.
+
+---
+
+# AI Knowledge Philosophy
+
+AI Accountant tidak menghafal seluruh informasi pada setiap saat.
+
+Sebaliknya, AI hanya mengambil pengetahuan yang relevan dengan transaksi yang sedang diproses.
+
+Setiap keputusan akuntansi merupakan hasil kombinasi dari:
+
+- General Knowledge
+- Company Memory
+- Conversation Context
+- Accounting Rules
+- Reasoning Engine
+
+Pendekatan ini memberikan beberapa keuntungan:
+
+- Mengurangi halusinasi AI.
+- Menghemat penggunaan token.
+- Mempercepat proses reasoning.
+- Memastikan keputusan dapat dijelaskan.
+- Memungkinkan setiap perusahaan memiliki knowledge yang berbeda tanpa memengaruhi perusahaan lain.
+
+Dengan filosofi ini, AI Accountant dapat memberikan keputusan yang konsisten, transparan, dapat diaudit, dan terus berkembang seiring bertambahnya informasi perusahaan.
 
 ---
 
