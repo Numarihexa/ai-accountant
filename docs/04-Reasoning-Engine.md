@@ -1,9 +1,9 @@
 # AI Accountant Reasoning Engine
 
-**Version:** 1.0 (Draft)
-**Status:** Draft
-**Owner:** Rizky
-**Reviewer:** ChatGPT
+**Version:** 1.0 (Draft)  
+**Status:** Draft  
+**Owner:** Rizky  
+**Reviewer:** ChatGPT  
 **Last Updated:** 20 Juli 2026
 
 ---
@@ -14,11 +14,24 @@ Dokumen ini mendefinisikan cara AI Accountant berpikir sebelum mengambil keputus
 
 AI tidak boleh langsung membuat jurnal.
 
-AI harus melalui proses reasoning yang terstruktur.
+AI harus melalui proses reasoning yang terstruktur, konsisten, dan dapat dipertanggungjawabkan.
 
 ---
 
-# 2. Design Principles
+# 2. Reasoning Objectives
+
+Reasoning Engine bertujuan untuk memastikan bahwa setiap keputusan AI Accountant:
+
+- Akurat.
+- Konsisten.
+- Dapat dijelaskan.
+- Dapat diaudit.
+- Mengikuti standar akuntansi yang berlaku.
+- Tidak bergantung pada asumsi atau tebakan.
+
+---
+
+# 3. Design Principles
 
 Reasoning harus:
 
@@ -30,7 +43,7 @@ Reasoning harus:
 
 ---
 
-# 3. Core Principles
+# 4. Core Principles
 
 Sebelum membuat jurnal AI harus memastikan:
 
@@ -42,7 +55,24 @@ Sebelum membuat jurnal AI harus memastikan:
 
 ---
 
-# 4. Reasoning Pipeline
+# 5. Reasoning Inputs
+
+Sebelum melakukan reasoning, AI dapat menggunakan sumber informasi berikut:
+
+- Percakapan saat ini.
+- Riwayat percakapan yang relevan.
+- Profil perusahaan.
+- Chart of Accounts (COA).
+- Accounting Rules.
+- Accounting Knowledge Framework.
+- Dokumen yang diunggah pengguna.
+- Kebijakan akuntansi perusahaan.
+
+AI tidak boleh menggunakan informasi di luar sumber tersebut sebagai dasar pengambilan keputusan.
+
+---
+
+# 6. Reasoning Pipeline
 
 Setiap transaksi harus diproses melalui tahapan berikut.
 
@@ -61,7 +91,7 @@ AI tidak boleh melewati tahapan di atas.
 
 ---
 
-# 5. Fact Extraction
+# 7. Fact Extraction
 
 AI harus mengidentifikasi fakta yang terdapat pada percakapan.
 
@@ -69,7 +99,7 @@ Contoh fakta:
 
 - Jenis transaksi
 - Nilai transaksi
-- Tanggal
+- Tanggal transaksi
 - Metode pembayaran
 - Pihak terkait
 - Barang atau jasa
@@ -79,7 +109,7 @@ AI hanya boleh menggunakan fakta yang diberikan atau telah dikonfirmasi.
 
 ---
 
-# 6. Context Analysis
+# 8. Context Analysis
 
 Sebelum menentukan akun, AI harus memahami konteks perusahaan.
 
@@ -87,14 +117,14 @@ Contoh:
 
 - Jenis usaha
 - Skala usaha
-- Kebijakan akuntansi
 - Struktur COA
+- Kebijakan akuntansi
 - Riwayat transaksi
 - Periode akuntansi
 
 ---
 
-# 7. Information Validation
+# 9. Information Validation
 
 AI harus memeriksa apakah seluruh informasi yang dibutuhkan telah tersedia.
 
@@ -102,7 +132,7 @@ Apabila belum lengkap, AI harus berpindah ke tahap Clarification.
 
 ---
 
-# 8. Clarification Rules
+# 10. Clarification Rules
 
 AI wajib bertanya apabila:
 
@@ -114,35 +144,35 @@ AI tidak boleh melanjutkan ke tahap pencatatan sebelum informasi memadai.
 
 ---
 
-# 9. Accounting Classification
+# 11. Accounting Classification
 
 Setelah seluruh informasi lengkap, AI menentukan:
 
-- Jenis transaksi
-- Akun yang digunakan
-- Dampak terhadap laporan keuangan
-- Perlakuan akuntansi
+- Jenis transaksi.
+- Akun yang digunakan.
+- Dampak terhadap laporan keuangan.
+- Perlakuan akuntansi.
 
 Seluruh keputusan harus mengikuti Accounting Rules dan COA.
 
 ---
 
-# 10. Confidence Evaluation
+# 12. Confidence Evaluation
 
 Sebelum membuat jurnal, AI harus mengevaluasi tingkat keyakinannya terhadap keputusan yang diambil.
 
 | Confidence Score | Tindakan AI |
 |------------------|-------------|
 | 95–100% | Langsung melanjutkan proses pencatatan. |
-| 80–94% | Melanjutkan pencatatan dan menjelaskan alasan keputusan kepada pengguna. |
+| 80–94% | Melanjutkan pencatatan disertai penjelasan kepada pengguna. |
 | 60–79% | Wajib meminta klarifikasi sebelum membuat jurnal. |
-| Di bawah 60% | Tidak boleh membuat jurnal dan harus meminta informasi tambahan. |
+| <60% | Tidak boleh membuat jurnal dan harus meminta informasi tambahan. |
 
 AI tidak boleh memaksakan keputusan apabila tingkat keyakinan rendah.
 
 ---
 
-# 11. Journal Validation
+# 13. Journal Validation
 
 Sebelum jurnal disimpan AI harus memastikan:
 
@@ -154,7 +184,7 @@ Sebelum jurnal disimpan AI harus memastikan:
 
 ---
 
-# 12. Recording
+# 14. Recording
 
 AI membuat jurnal.
 
@@ -168,7 +198,7 @@ AI memperbarui:
 
 ---
 
-# 13. Explanation
+# 15. Explanation
 
 Setelah pencatatan selesai AI harus menjelaskan:
 
@@ -180,7 +210,24 @@ Penjelasan harus menggunakan bahasa yang mudah dipahami.
 
 ---
 
-# 14. Failure Handling
+# 16. Reasoning Outputs
+
+Setiap proses reasoning minimal harus menghasilkan:
+
+- Status transaksi.
+- Confidence Score.
+- Ringkasan fakta.
+- Klasifikasi transaksi.
+- Akun yang dipilih.
+- Jurnal.
+- Dampak terhadap laporan keuangan.
+- Penjelasan kepada pengguna.
+
+Output inilah yang menjadi dasar pencatatan transaksi dan komunikasi kepada pengguna.
+
+---
+
+# 17. Failure Handling
 
 AI harus menghentikan proses apabila:
 
@@ -193,7 +240,20 @@ Dalam kondisi tersebut AI harus meminta klarifikasi.
 
 ---
 
-# 15. Example Reasoning
+# 18. Human Override
+
+Pengguna memiliki hak untuk:
+
+- Membatalkan pencatatan.
+- Mengubah informasi transaksi.
+- Meminta AI melakukan reasoning ulang.
+- Meminta penjelasan lebih rinci.
+
+AI wajib melakukan reasoning ulang apabila terdapat perubahan fakta.
+
+---
+
+# 19. Example Reasoning
 
 ## User
 
@@ -265,11 +325,11 @@ Kredit Bank
 
 **Explanation**
 
-Laptop digunakan untuk operasional usaha dan memenuhi definisi aset tetap, sehingga dicatat sebagai aset perusahaan, bukan sebagai beban.
+Laptop digunakan untuk operasional usaha dan memiliki manfaat ekonomi lebih dari satu periode sehingga memenuhi kriteria aset tetap.
 
 ---
 
-# 16. Decision Tree
+# 20. Decision Tree
 
 Setiap transaksi harus melewati pohon keputusan berikut.
 
@@ -313,13 +373,13 @@ Recording
 Explanation
 ```
 
-Decision Tree ini menjadi acuan utama AI dalam menentukan langkah berikutnya pada setiap transaksi.
+Decision Tree menjadi acuan utama AI dalam menentukan langkah berikutnya.
 
 ---
 
-# 17. Explainability Rules
+# 21. Explainability Rules
 
-Setiap keputusan AI harus dapat dijelaskan kepada pengguna.
+Setiap keputusan AI harus dapat dijelaskan.
 
 AI wajib mampu menjelaskan:
 
@@ -336,13 +396,43 @@ Mengapa transaksi ini dicatat sebagai aset tetap?
 
 **AI**
 
-Karena laptop digunakan untuk operasional usaha, memiliki manfaat ekonomi lebih dari satu periode, dan memenuhi kriteria aset tetap berdasarkan kebijakan akuntansi perusahaan.
+Karena laptop digunakan untuk operasional usaha, memiliki manfaat ekonomi lebih dari satu periode, dan memenuhi kriteria aset tetap sesuai kebijakan akuntansi perusahaan.
 
-AI tidak boleh memberikan jawaban yang tidak dapat dijelaskan alasan atau dasar pengambilan keputusannya.
+AI tidak boleh memberikan jawaban yang tidak memiliki dasar reasoning.
 
 ---
 
-# 18. Reasoning Boundaries
+# 22. Reasoning Audit
+
+Setiap keputusan AI harus dapat ditelusuri.
+
+Audit trail minimal mencakup:
+
+- Waktu reasoning.
+- Fakta yang digunakan.
+- Klarifikasi yang diberikan pengguna.
+- Confidence Score.
+- Akun yang dipilih.
+- Jurnal yang dihasilkan.
+- Identitas versi Reasoning Engine yang digunakan.
+
+Audit trail harus memungkinkan pengguna maupun auditor memahami bagaimana keputusan dibuat.
+
+---
+
+# 23. Reasoning Constraints
+
+AI tidak boleh:
+
+- Menggunakan informasi yang belum dikonfirmasi.
+- Mengabaikan kebijakan akuntansi perusahaan.
+- Mengubah fakta transaksi.
+- Mengutamakan kecepatan di atas ketepatan.
+- Menghasilkan jurnal apabila Confidence Score berada di bawah batas minimum.
+
+---
+
+# 24. Reasoning Boundaries
 
 AI tidak boleh:
 
@@ -370,7 +460,7 @@ Seluruh keputusan harus dapat dijelaskan dan diaudit.
 
 **Dampak**
 
-AI akan menghasilkan pencatatan yang konsisten, transparan, dan dapat dipertanggungjawabkan.
+AI akan menghasilkan pencatatan yang konsisten, transparan, dapat ditelusuri, dan dapat dipertanggungjawabkan.
 
 **Status**
 
