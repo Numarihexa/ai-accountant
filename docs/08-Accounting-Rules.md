@@ -1,20 +1,29 @@
 # AI Accountant Accounting Rules
 
-**Version:** 1.0 (Draft)
-**Status:** Draft
-**Owner:** Rizky
-**Reviewer:** ChatGPT
+**Version:** 1.0 (Draft)  
+**Status:** Draft  
+**Owner:** Rizky  
+**Reviewer:** ChatGPT  
 **Last Updated:** 20 Juli 2026
 
 ---
 
 # 1. Purpose
 
-Dokumen ini mendefinisikan seluruh aturan akuntansi yang digunakan oleh AI Accountant dalam mengambil keputusan.
+Dokumen ini mendefinisikan seluruh aturan akuntansi (**Accounting Rules**) yang menjadi dasar pengambilan keputusan AI Accountant.
 
-Reasoning Engine hanya boleh membuat jurnal berdasarkan aturan yang terdapat pada dokumen ini dan dokumen pendukung yang telah berstatus **Approved**.
+Reasoning Engine hanya boleh menghasilkan jurnal berdasarkan aturan yang didefinisikan pada dokumen ini beserta dokumen pendukung yang telah berstatus **Approved**.
 
-Accounting Rules merupakan sumber utama logika akuntansi AI Accountant.
+Accounting Rules memisahkan **logika akuntansi** dari **logika reasoning**, sehingga setiap keputusan dapat dijelaskan, diaudit, diperbarui, dan divalidasi secara independen.
+
+Dokumen ini menjadi referensi utama bagi:
+
+- Reasoning Engine
+- Journal Engine
+- COA Mapping
+- Validation Engine
+- Reporting Engine
+- Audit Engine
 
 ---
 
@@ -22,17 +31,20 @@ Accounting Rules merupakan sumber utama logika akuntansi AI Accountant.
 
 Accounting Rules bertujuan untuk:
 
-- Menjamin konsistensi pencatatan.
-- Mengurangi halusinasi AI.
-- Menjadi dasar seluruh jurnal.
-- Menjamin setiap keputusan dapat dijelaskan.
-- Memastikan laporan keuangan sesuai prinsip akuntansi.
+- Menjamin konsistensi pencatatan transaksi.
+- Mengurangi kemungkinan halusinasi AI.
+- Menjadi dasar seluruh proses penjurnalan.
+- Memastikan setiap keputusan memiliki dasar akuntansi yang jelas.
+- Memastikan laporan keuangan mengikuti prinsip akuntansi yang berlaku.
+- Mendukung Explainable AI (XAI) sehingga setiap jurnal dapat dijelaskan.
+- Mempermudah proses audit dan pengembangan sistem di masa depan.
+- Memungkinkan pembaruan aturan tanpa mengubah Reasoning Engine.
 
 ---
 
 # 3. Accounting Principles
 
-Dalam setiap transaksi AI harus mengikuti prinsip berikut.
+Dalam setiap transaksi, AI Accountant wajib mengikuti prinsip-prinsip akuntansi berikut.
 
 1. Substance Over Form
 2. Going Concern
@@ -44,14 +56,48 @@ Dalam setiap transaksi AI harus mengikuti prinsip berikut.
 8. Materiality
 9. Faithful Representation
 
-Apabila terdapat konflik, AI harus meminta klarifikasi.
+Apabila terdapat konflik antar prinsip atau informasi yang tersedia belum memadai, AI wajib meminta klarifikasi kepada pengguna sebelum melanjutkan proses pencatatan.
+
+---
+
+## 3.1 PSAK-Oriented Best Practice
+
+Accounting Rules dirancang agar selaras dengan praktik akuntansi di Indonesia.
+
+Pada versi awal, AI mengacu pada:
+
+- PSAK yang berlaku
+- Kebijakan akuntansi perusahaan
+- Company Memory
+- Chart of Accounts (COA)
+- Accounting Knowledge Framework
+
+AI tidak diperbolehkan menggunakan interpretasi yang bertentangan dengan kebijakan perusahaan ataupun PSAK yang berlaku.
+
+---
+
+## 3.2 Rule Design Principles
+
+Seluruh aturan dalam dokumen ini harus memenuhi karakteristik berikut.
+
+- Konsisten
+- Deterministik
+- Explainable
+- Auditable
+- Modular
+- Versioned
+- Dapat diuji (Testable)
+
+Dengan prinsip tersebut, setiap keputusan AI dapat direproduksi dan diverifikasi kembali.
 
 ---
 
 # 4. Rule Evaluation Pipeline
 
+Setiap transaksi harus diproses melalui pipeline berikut.
+
 ```text
-Transaction
+User Message
       │
       ▼
 Intent Detection
@@ -60,10 +106,16 @@ Intent Detection
 Entity Extraction
       │
       ▼
+Context Validation
+      │
+      ▼
 Company Memory
       │
       ▼
 Accounting Rules
+      │
+      ▼
+Rule Evaluation
       │
       ▼
 COA Mapping
@@ -73,29 +125,162 @@ Journal Validation
       │
       ▼
 Journal Engine
+      │
+      ▼
+Ledger
+      │
+      ▼
+Financial Statements
 ```
 
-AI tidak boleh melewati pipeline ini.
+Accounting Rules tidak boleh dilewati.
+
+Apabila salah satu tahapan gagal divalidasi, proses harus dihentikan dan AI wajib meminta klarifikasi kepada pengguna.
+
+---
+
+## 4.1 Rule Evaluation Stages
+
+Setiap rule dievaluasi melalui tahapan berikut.
+
+1. Rule Trigger
+2. Rule Preconditions
+3. Rule Evaluation
+4. Rule Output
+5. Validation
+6. Explainability
+7. Audit Logging
+
+Rule hanya boleh dieksekusi apabila seluruh tahapan berhasil dilewati.
+
+---
+
+## 4.2 Rule Metadata
+
+Setiap aturan harus memiliki metadata sebagai berikut.
+
+| Field | Keterangan |
+|--------|------------|
+| Rule ID | Identitas unik rule |
+| Rule Name | Nama aturan |
+| Category | Kelompok rule |
+| Version | Versi rule |
+| Status | Draft / Review / Approved / Active |
+| Effective Date | Tanggal mulai berlaku |
+| Owner | Penanggung jawab |
+| Reviewer | Reviewer |
+| Last Updated | Tanggal perubahan terakhir |
+
+Metadata digunakan oleh Rule Engine untuk memastikan hanya aturan yang valid yang digunakan.
 
 ---
 
 # 5. Rule Priority
 
-Apabila terdapat konflik aturan, AI menggunakan urutan berikut.
+Apabila terdapat konflik antar aturan, AI harus menggunakan prioritas berikut.
 
 1. User Confirmation
 2. Company Accounting Policy
-3. Accounting Rules
-4. COA Standard
-5. General Accounting Knowledge
+3. Company Memory
+4. Accounting Rules
+5. PSAK
+6. COA Standard
+7. General Accounting Knowledge
 
-Prioritas lebih tinggi selalu mengalahkan prioritas di bawahnya.
+Prioritas yang lebih tinggi selalu mengesampingkan prioritas di bawahnya.
 
 ---
 
+## 5.1 Rule Conflict Resolution
+
+Apabila dua aturan menghasilkan keputusan yang berbeda, AI harus melakukan langkah berikut.
+
+```text
+Conflict Detected
+        │
+        ▼
+Check User Confirmation
+        │
+        ▼
+Check Company Policy
+        │
+        ▼
+Check Company Memory
+        │
+        ▼
+Check Accounting Rules
+        │
+        ▼
+Conflict Resolved?
+     │
+ ┌───┴────┐
+ │        │
+Yes      No
+ │        │
+ ▼        ▼
+Continue Clarification
+```
+
+AI tidak boleh memilih salah satu aturan secara acak.
+
+---
+
+## 5.2 Rule Dependency
+
+Accounting Rules bergantung pada dokumen berikut.
+
+- Company Memory Framework
+- Accounting Knowledge Framework
+- Chart of Accounts (COA)
+- Reasoning Engine
+- Intent Catalog
+- Entity Catalog
+- Company Accounting Policy
+- PSAK
+
+Apabila salah satu dependency belum tersedia atau belum tervalidasi, AI wajib meminta klarifikasi sebelum melanjutkan proses.
+
+---
+
+## 5.3 Rule Execution Principles
+
+Sebelum suatu rule dijalankan, AI wajib memastikan bahwa:
+
+- Rule berstatus **Active**.
+- Rule sesuai dengan Company Policy.
+- Rule kompatibel dengan versi Knowledge Framework.
+- Rule memiliki seluruh informasi yang diperlukan.
+- Rule tidak bertentangan dengan hasil konfirmasi pengguna.
+
+Apabila salah satu syarat tidak terpenuhi, rule tidak boleh dijalankan.
+
+---
+
+### Validation Checklist
+
+Sebelum memasuki Rule Categories, AI harus memastikan:
+
+- ✓ Intent telah dikenali.
+- ✓ Entity telah diekstraksi.
+- ✓ Context telah tervalidasi.
+- ✓ Company Memory tersedia.
+- ✓ Accounting Rule tersedia.
+- ✓ Tidak ada konflik kebijakan.
+- ✓ Confidence memenuhi ambang minimal.
+
+Seluruh checklist harus terpenuhi sebelum proses evaluasi aturan dilanjutkan.
+
+---
+
+=== END OF PART 1A ===
+
 # 6. Rule Categories
 
-Accounting Rules dibagi menjadi beberapa kelompok.
+Accounting Rules dikelompokkan ke dalam beberapa kategori berdasarkan siklus akuntansi dan jenis transaksi.
+
+Setiap kategori memiliki kumpulan rule yang dapat dikembangkan secara independen tanpa memengaruhi kategori lainnya.
+
+Kategori utama meliputi:
 
 - Asset Rules
 - Liability Rules
@@ -108,39 +293,235 @@ Accounting Rules dibagi menjadi beberapa kelompok.
 - Adjustment Rules
 - Closing Rules
 
+Pada versi berikutnya kategori dapat diperluas, misalnya:
+
+- Tax Rules
+- Payroll Rules
+- Foreign Exchange Rules
+- Leasing Rules
+- Manufacturing Rules
+- Construction Contract Rules
+- Financial Instrument Rules
+
+---
+
+## 6.1 Rule Structure
+
+Seluruh rule dalam dokumen ini mengikuti struktur standar berikut.
+
+| Field | Description |
+|---------|-------------|
+| Rule ID | Identitas unik rule |
+| Rule Name | Nama rule |
+| Category | Kelompok rule |
+| Trigger | Kondisi yang memicu rule |
+| Preconditions | Syarat sebelum rule dijalankan |
+| Rule Logic | Logika akuntansi |
+| Output | Hasil rule |
+| Validation | Pemeriksaan setelah rule |
+| Explainability | Penjelasan kepada pengguna |
+| Auditability | Informasi yang dicatat pada audit log |
+
+Dengan struktur tersebut setiap rule dapat diimplementasikan langsung ke Rule Engine.
+
 ---
 
 # 7. Asset Rules
 
-AI mencatat sebagai aset apabila:
+AI mencatat suatu transaksi sebagai aset apabila seluruh kondisi berikut terpenuhi.
 
-- dikendalikan perusahaan;
-- memberikan manfaat ekonomi di masa depan;
-- nilai dapat diukur secara andal.
+- Perusahaan mengendalikan aset tersebut.
+- Memberikan manfaat ekonomi di masa depan.
+- Nilai dapat diukur secara andal.
+- Kepemilikan atau hak penggunaan telah diperoleh.
 
-Jika tidak memenuhi ketiga syarat tersebut, transaksi tidak boleh dicatat sebagai aset.
+Apabila salah satu syarat tidak terpenuhi, transaksi tidak boleh dicatat sebagai aset.
+
+---
+
+## 7.1 Asset Recognition Decision Tree
+
+```text
+Apakah perusahaan mengendalikan aset?
+
+            │
+      ┌─────┴─────┐
+      │           │
+     Ya         Tidak
+      │           │
+      ▼           ▼
+Manfaat ekonomi?  Bukan Aset
+      │
+ ┌────┴─────┐
+ │          │
+Ya        Tidak
+ │          │
+ ▼          ▼
+Nilai dapat  Klarifikasi
+diukur?
+ │
+ ┌────┴─────┐
+ │          │
+Ya        Tidak
+ │          │
+ ▼          ▼
+Catat      Klarifikasi
+Sebagai
+Aset
+```
+
+---
+
+## 7.2 Rule Specification
+
+**Rule ID**
+
+AR-AST-001
+
+**Rule Name**
+
+Asset Recognition
+
+**Trigger**
+
+Pengguna mencatat pembelian aset.
+
+**Preconditions**
+
+- Nilai diketahui.
+- Tujuan penggunaan diketahui.
+- Kepemilikan telah diperoleh.
+
+**Output**
+
+- Asset Classification
+- COA Recommendation
+- Journal Proposal
+
+---
+
+## 7.3 Validation Checklist
+
+Sebelum aset dicatat AI harus memastikan:
+
+- ✓ Nilai transaksi tersedia.
+- ✓ Jenis aset diketahui.
+- ✓ Digunakan untuk operasional.
+- ✓ Tidak merupakan persediaan.
+- ✓ Tidak merupakan beban.
 
 ---
 
 # 8. Liability Rules
 
-Liabilitas diakui apabila:
+Liabilitas diakui apabila memenuhi seluruh kondisi berikut.
 
-- terdapat kewajiban saat ini;
-- berasal dari transaksi masa lalu;
-- penyelesaiannya mengurangi sumber daya perusahaan.
+- Terdapat kewajiban saat ini.
+- Berasal dari transaksi masa lalu.
+- Penyelesaian kewajiban akan mengurangi sumber daya ekonomi perusahaan.
+- Nilainya dapat diukur secara andal.
+
+AI tidak boleh mengakui liabilitas yang belum memiliki dasar transaksi.
+
+---
+
+## 8.1 Rule Specification
+
+**Rule ID**
+
+AR-LIA-001
+
+**Rule Name**
+
+Liability Recognition
+
+**Trigger**
+
+Terjadi transaksi yang menimbulkan kewajiban.
+
+**Preconditions**
+
+- Terdapat pihak kreditur.
+- Nilai diketahui.
+- Kewajiban telah timbul.
+
+**Output**
+
+- Liability Classification
+- Journal Recommendation
+
+---
+
+## 8.2 Validation Checklist
+
+- ✓ Kewajiban telah terjadi.
+- ✓ Nominal diketahui.
+- ✓ Jatuh tempo tersedia (bila ada).
+- ✓ Tidak termasuk ekuitas.
 
 ---
 
 # 9. Revenue Rules
 
-Pendapatan diakui apabila:
+Pendapatan hanya boleh diakui apabila:
 
-- hak memperoleh pendapatan telah timbul;
-- transaksi telah terjadi;
-- nilai dapat diukur.
+- Hak memperoleh pendapatan telah timbul.
+- Barang atau jasa telah diserahkan sesuai kebijakan perusahaan.
+- Nilai transaksi dapat diukur.
+- Besar kemungkinan manfaat ekonomi akan diterima.
 
-AI tidak boleh mengakui pendapatan yang belum diperoleh.
+AI tidak boleh mengakui pendapatan berdasarkan perkiraan semata.
+
+---
+
+## 9.1 Rule Specification
+
+**Rule ID**
+
+AR-REV-001
+
+**Rule Name**
+
+Revenue Recognition
+
+**Trigger**
+
+Penjualan barang atau jasa.
+
+**Preconditions**
+
+- Customer diketahui.
+- Nilai diketahui.
+- Barang/jasa telah memenuhi syarat pengakuan.
+
+**Output**
+
+- Revenue Classification
+- Journal Recommendation
+
+---
+
+## 9.2 Revenue Decision Tree
+
+```text
+Barang/Jasa telah diserahkan?
+
+          │
+    ┌─────┴─────┐
+    │           │
+   Ya        Belum
+    │           │
+    ▼           ▼
+Hak Pendapatan?  Tunda Pengakuan
+    │
+ ┌──┴────┐
+ │       │
+Ya      Tidak
+ │       │
+ ▼       ▼
+Akui    Klarifikasi
+Revenue
+```
 
 ---
 
@@ -148,410 +529,385 @@ AI tidak boleh mengakui pendapatan yang belum diperoleh.
 
 Beban diakui apabila:
 
-- manfaat ekonomi telah dikonsumsi;
-- berkaitan dengan pendapatan;
-- telah terjadi kewajiban.
+- Manfaat ekonomi telah dikonsumsi.
+- Berkaitan dengan aktivitas operasional perusahaan.
+- Memenuhi prinsip matching apabila relevan.
+- Nilai transaksi dapat diukur.
+
+AI tidak boleh mengakui beban yang seharusnya dikapitalisasi menjadi aset.
 
 ---
 
+## 10.1 Rule Specification
+
+**Rule ID**
+
+AR-EXP-001
+
+**Rule Name**
+
+Expense Recognition
+
+**Trigger**
+
+Pengeluaran perusahaan.
+
+**Preconditions**
+
+- Nominal diketahui.
+- Tujuan penggunaan diketahui.
+
+**Output**
+
+- Expense Classification
+- COA Recommendation
+- Journal Recommendation
+
+---
+
+## 10.2 Validation Checklist
+
+- ✓ Bukan aset.
+- ✓ Bukan investasi.
+- ✓ Bukan pembayaran utang.
+- ✓ Berkaitan dengan operasional.
+
+---
+
+=== END OF PART 1B ===
+
 # 11. Capital vs Expense Decision
 
-Apabila AI menerima transaksi pembelian, AI harus mengevaluasi:
+Setiap transaksi pembelian harus dievaluasi untuk menentukan apakah dicatat sebagai **Aset (Capital Expenditure)** atau **Beban (Operating Expense)**.
+
+Keputusan ini harus mengikuti kebijakan perusahaan, Accounting Rules, dan Company Memory.
+
+AI tidak boleh menentukan klasifikasi hanya berdasarkan nama barang.
+
+---
+
+## 11.1 Decision Criteria
+
+Suatu pembelian diklasifikasikan sebagai **Capital Expenditure** apabila memenuhi sebagian besar kriteria berikut.
+
+- Memberikan manfaat ekonomi lebih dari satu periode.
+- Digunakan untuk operasional perusahaan.
+- Memenuhi batas kapitalisasi perusahaan.
+- Menambah nilai aset.
+- Memperpanjang umur manfaat aset.
+
+Apabila tidak memenuhi kriteria tersebut maka transaksi dicatat sebagai beban.
+
+---
+
+## 11.2 Decision Tree
 
 ```text
-Apakah manfaat > 1 periode?
+Pembelian
 
       │
- ┌────┴─────┐
- │          │
+      ▼
+
+Manfaat > 1 Tahun?
+
+      │
+ ┌────┴────┐
+ │         │
 Ya        Tidak
- │          │
- ▼          ▼
-Asset     Expense
+ │         │
+ ▼         ▼
+
+Melebihi Nilai
+Kapitalisasi?
+
+ │
+ ┌────┴────┐
+ │         │
+Ya        Tidak
+ │         │
+ ▼         ▼
+
+Asset    Expense
 ```
 
-Apabila belum yakin, AI wajib meminta klarifikasi.
+---
+
+## 11.3 Rule Specification
+
+| Field | Value |
+|---------|------|
+| Rule ID | AR-CAP-001 |
+| Rule Name | Capitalization Decision |
+| Category | Asset Rules |
+| Trigger | Purchase Transaction |
+| Output | Asset / Expense Classification |
+
+---
+
+## 11.4 Validation Checklist
+
+AI harus memastikan:
+
+- ✓ Nilai transaksi diketahui.
+- ✓ Umur manfaat diketahui.
+- ✓ Tujuan penggunaan diketahui.
+- ✓ Kebijakan kapitalisasi tersedia.
 
 ---
 
 # 12. Inventory Rules
 
-Persediaan dicatat apabila:
+Persediaan diakui apabila barang:
 
 - dimiliki untuk dijual;
 - digunakan dalam proses produksi;
 - digunakan sebagai bahan baku.
 
-Metode penilaian mengikuti Company Memory.
+AI harus mengikuti metode penilaian persediaan yang tersimpan pada Company Memory.
 
-Contoh:
+---
 
-FIFO
+## 12.1 Inventory Valuation
 
-Average
+Metode yang didukung.
 
-FEFO (bila relevan)
+- FIFO
+- Weighted Average
+- FEFO (apabila relevan)
+- Specific Identification (future version)
+
+AI tidak boleh mengganti metode tanpa konfirmasi pengguna.
+
+---
+
+## 12.2 Rule Specification
+
+| Field | Value |
+|---------|------|
+| Rule ID | AR-INV-001 |
+| Rule Name | Inventory Recognition |
+| Category | Inventory Rules |
+| Trigger | Inventory Transaction |
+| Output | Inventory Classification |
+
+---
+
+## 12.3 Validation Checklist
+
+- ✓ Barang merupakan persediaan.
+- ✓ Nilai diketahui.
+- ✓ Metode penilaian tersedia.
+- ✓ Gudang diketahui (jika ada).
 
 ---
 
 # 13. Fixed Asset Rules
 
-Aset tetap harus:
+Suatu aset dikategorikan sebagai aset tetap apabila:
 
-- digunakan untuk operasional;
-- memiliki manfaat lebih dari satu periode;
-- memenuhi nilai kapitalisasi perusahaan.
+- digunakan untuk operasional perusahaan;
+- memiliki manfaat ekonomi lebih dari satu periode;
+- memenuhi nilai kapitalisasi perusahaan;
+- bukan untuk dijual kembali.
 
-Apabila nilai kapitalisasi belum tersedia, AI harus menggunakan Company Memory atau meminta klarifikasi.
+---
+
+## 13.1 Fixed Asset Categories
+
+Contoh kategori.
+
+- Tanah
+- Bangunan
+- Kendaraan
+- Mesin
+- Peralatan
+- Komputer
+- Inventaris Kantor
+
+Kategori dapat dikembangkan sesuai COA perusahaan.
+
+---
+
+## 13.2 Rule Specification
+
+| Field | Value |
+|---------|------|
+| Rule ID | AR-FA-001 |
+| Rule Name | Fixed Asset Recognition |
+| Category | Fixed Asset Rules |
+| Trigger | Asset Purchase |
+| Output | Fixed Asset Classification |
+
+---
+
+## 13.3 Validation Checklist
+
+AI memastikan:
+
+- ✓ Bukan persediaan.
+- ✓ Umur manfaat > 1 tahun.
+- ✓ Digunakan untuk operasional.
+- ✓ Nilai memenuhi batas kapitalisasi.
 
 ---
 
 # 14. Depreciation Rules
 
-Penyusutan mengikuti kebijakan perusahaan.
+Penyusutan dilakukan berdasarkan kebijakan perusahaan.
 
-Contoh metode:
+Reasoning Engine tidak diperbolehkan menentukan metode penyusutan sendiri.
 
-- Garis Lurus
-- Saldo Menurun
-- Unit Produksi
+---
 
-AI tidak boleh menentukan metode sendiri.
+## 14.1 Supported Methods
+
+Versi pertama mendukung.
+
+- Garis Lurus (Straight Line)
+- Saldo Menurun (Declining Balance)
+- Unit Produksi (Unit of Production)
+
+---
+
+## 14.2 Rule Specification
+
+| Field | Value |
+|---------|------|
+| Rule ID | AR-DEP-001 |
+| Rule Name | Depreciation |
+| Category | Depreciation Rules |
+| Trigger | End of Accounting Period |
+| Output | Depreciation Journal |
+
+---
+
+## 14.3 Validation Checklist
+
+AI memastikan.
+
+- ✓ Metode penyusutan tersedia.
+- ✓ Umur manfaat tersedia.
+- ✓ Nilai residu tersedia (jika digunakan).
+- ✓ Aset masih aktif.
 
 ---
 
 # 15. Journal Rules
 
-Setiap jurnal wajib memenuhi:
+Setiap jurnal yang dihasilkan AI Accountant wajib memenuhi standar validasi sebelum disimpan.
+
+Journal Engine tidak boleh menyimpan jurnal yang gagal divalidasi.
+
+---
+
+## 15.1 Mandatory Rules
+
+Seluruh jurnal wajib memenuhi:
 
 - Debit = Kredit
 - COA valid
-- Periode benar
-- Mata uang benar
-- Tidak duplikat
+- Accounting Period valid
+- Mata uang valid
+- Tidak terjadi duplikasi transaksi
 - Referensi transaksi tersedia
+- Rule telah dievaluasi
+- Confidence memenuhi batas minimum
 
 ---
 
-# 16. COA Mapping Rules
+## 15.2 Journal Validation Pipeline
 
-Seluruh transaksi harus dipetakan ke akun COA.
-
-Contoh:
-
-| Jenis Transaksi | COA |
-|-----------------|-----|
-| Penjualan | Pendapatan |
-| Pembelian ATK | Beban ATK |
-| Pembelian Laptop | Aset Tetap |
-| Setoran Modal | Modal Pemilik |
-
-COA Mapping menggunakan COA perusahaan apabila tersedia.
-
----
-
-# 17. Validation Rules
-
-Sebelum jurnal dibuat AI harus memvalidasi:
-
-✓ Entity lengkap
-
-✓ Company Policy
-
-✓ Accounting Rules
-
-✓ COA
-
-✓ Journal Balance
-
-✓ Duplicate Detection
-
-✓ Accounting Period
+```text
+Journal Proposal
+        │
+        ▼
+COA Validation
+        │
+        ▼
+Balance Validation
+        │
+        ▼
+Duplicate Check
+        │
+        ▼
+Accounting Period
+        │
+        ▼
+Policy Validation
+        │
+        ▼
+Confidence Evaluation
+        │
+        ▼
+Journal Approved
+```
 
 ---
 
-# 18. Clarification Rules
+## 15.3 Journal Metadata
 
-AI wajib bertanya apabila:
+Setiap jurnal minimal memiliki metadata berikut.
 
-- metode pembayaran tidak diketahui;
-- tujuan transaksi tidak jelas;
-- terdapat dua kemungkinan akun;
-- transaksi bertentangan dengan kebijakan perusahaan;
-- nilai transaksi tidak lengkap.
-
-AI tidak boleh membuat asumsi.
-
----
-
-# 19. Exception Handling
-
-Apabila ditemukan kondisi berikut:
-
-- transaksi tidak lazim;
-- transaksi melanggar aturan;
-- kebijakan perusahaan tidak tersedia;
-- confidence rendah;
-
-AI harus menghentikan proses pencatatan dan meminta klarifikasi.
+| Field | Description |
+|---------|------------|
+| Journal ID | Identitas jurnal |
+| Transaction ID | Referensi transaksi |
+| Rule ID | Rule yang digunakan |
+| COA Version | Versi COA |
+| Rule Version | Versi Rule |
+| Confidence | Nilai confidence |
+| Created At | Timestamp |
+| Created By | AI Accountant |
+| Status | Draft / Approved / Posted |
 
 ---
 
-# 20. Explainability Rules
+## 15.4 Explainability
 
-Setiap keputusan harus dapat dijelaskan.
+AI wajib mampu menjelaskan.
 
-AI wajib mampu menjelaskan:
-
-- aturan yang digunakan;
-- alasan memilih akun;
-- alasan jurnal;
-- dampak terhadap laporan keuangan.
-
----
-
-# 21. Rule Confidence
-
-| Confidence | Action |
-|------------|--------|
-|95–100%|Lanjut|
-|80–94%|Lanjut dengan penjelasan|
-|60–79%|Klarifikasi|
-|<60%|Stop|
+- Mengapa jurnal dibuat.
+- Rule yang digunakan.
+- Alasan memilih akun.
+- Dampak terhadap laporan keuangan.
+- Pengaruh terhadap saldo akun.
 
 ---
 
-# 22. Rule Logging
+## 15.5 Auditability
 
-Setiap keputusan harus menghasilkan log.
+Setiap jurnal harus dapat diaudit.
 
-Minimal berisi:
+Minimal menyimpan:
 
-- Timestamp
 - Rule ID
-- Rule Name
-- Confidence
-- Input
-- Output
-- Journal
+- Rule Version
+- Company Policy Version
+- COA Version
+- Confidence Score
 - User Confirmation
+- Input Transaction
+- Generated Journal
+- Timestamp
+
+Audit Log tidak boleh diubah setelah jurnal diposting.
 
 ---
 
-# 23. Rule Versioning
+## 15.6 Validation Checklist
 
-Setiap aturan memiliki:
+Sebelum jurnal diposting AI memastikan.
 
-- Rule ID
-- Version
-- Effective Date
-- Status
-- Owner
-- Reviewer
-- Change History
-
-Reasoning Engine hanya boleh menggunakan rule berstatus **Active**.
-
----
-
-# 24. Rule Lifecycle
-
-```text
-Draft
-      │
-      ▼
-Review
-      │
-      ▼
-Approved
-      │
-      ▼
-Active
-      │
-      ▼
-Deprecated
-      │
-      ▼
-Archived
-```
+- ✓ Rule Active
+- ✓ Company Policy sesuai
+- ✓ Company Memory tersedia
+- ✓ COA valid
+- ✓ Debit = Kredit
+- ✓ Tidak duplikat
+- ✓ Accounting Period terbuka
+- ✓ Confidence ≥ Threshold
+- ✓ Journal telah dijelaskan kepada pengguna apabila diperlukan
 
 ---
 
-# 25. Rule Dependency
-
-Accounting Rules bergantung pada:
-
-- Company Memory
-- Accounting Knowledge Framework
-- COA
-- PSAK
-- Company Policy
-- Reasoning Engine
-
-Apabila salah satu dependency tidak tersedia, AI harus meminta klarifikasi.
-
----
-
-# 26. Rule Boundaries
-
-AI tidak boleh:
-
-- mengarang aturan;
-- mengubah aturan tanpa persetujuan;
-- menggunakan rule yang deprecated;
-- mengabaikan Company Policy;
-- mengabaikan konfirmasi pengguna.
-
----
-
-# 27. Example Rule
-
-## Rule ID
-
-AR-REV-001
-
-### Nama
-
-Revenue Recognition
-
-### Trigger
-
-Penjualan Barang
-
-### Condition
-
-- Barang telah diserahkan
-- Nilai diketahui
-- Hak pendapatan telah timbul
-
-### Journal
-
-Debit Piutang/Kas
-
-Kredit Pendapatan
-
-### Explainability
-
-Pendapatan diakui karena hak perusahaan atas pendapatan telah timbul setelah barang diserahkan kepada pelanggan.
-
----
-
-# 28. Rule Relationship
-
-```text
-User
-      │
-      ▼
-Conversation
-      │
-      ▼
-Intent
-      │
-      ▼
-Entity Extraction
-      │
-      ▼
-Company Memory
-      │
-      ▼
-Accounting Rules
-      │
-      ▼
-COA Mapping
-      │
-      ▼
-Reasoning Engine
-      │
-      ▼
-Journal Engine
-      │
-      ▼
-Ledger
-      │
-      ▼
-Financial Statements
-```
-
----
-
-# 29. Future Rule Modules
-
-Framework ini akan berkembang menjadi modul berikut.
-
-- Revenue Recognition Rules
-- Expense Recognition Rules
-- Inventory Rules
-- Fixed Asset Rules
-- Depreciation Rules
-- Tax Rules
-- Foreign Currency Rules
-- Leasing Rules
-- Construction Contract Rules
-- Manufacturing Rules
-- Financial Instrument Rules
-- Closing & Adjustment Rules
-
----
-
-# 30. Relationship With Other Documents
-
-```text
-Vision
-      │
-      ▼
-Persona
-      │
-      ▼
-Conversation Design
-      │
-      ▼
-Intent Catalog
-      │
-      ▼
-Company Memory
-      │
-      ▼
-Accounting Knowledge Framework
-      │
-      ▼
-Accounting Rules
-      │
-      ▼
-COA Master
-      │
-      ▼
-Reasoning Engine
-      │
-      ▼
-Journal Engine
-      │
-      ▼
-Ledger
-      │
-      ▼
-Financial Statements
-```
-
-Accounting Rules merupakan pusat logika akuntansi yang digunakan oleh Reasoning Engine.
-
----
-
-# Decision Log
-
-## D-008
-
-### Keputusan
-
-Seluruh jurnal AI Accountant harus dihasilkan berdasarkan Accounting Rules yang telah tervalidasi.
-
-### Alasan
-
-Pemisahan antara Reasoning Engine dan Accounting Rules memastikan bahwa logika berpikir AI terpisah dari aturan akuntansi, sehingga sistem menjadi lebih mudah diaudit, diperbarui, dan dikembangkan.
-
-### Dampak
-
-AI Accountant menghasilkan jurnal yang konsisten, transparan, dapat dijelaskan, dan mengikuti kebijakan akuntansi perusahaan tanpa bergantung pada asumsi model bahasa.
-
-### Status
-
-Draft
+=== END OF PART 1C ===
